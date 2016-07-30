@@ -57,6 +57,24 @@ class Menu
     end
   end
 
+  def read
+    CSV.open("employees.csv", "w") do |csv|
+      csv << %w{name phone address position salary slack github}
+      @peeps.each do |person|
+        csv << [person.name, person.phone, person.address, person.position, person.salary, person.slack, person.github]
+      end
+    end
+  end
+
+  def write
+    CSV.open("employees.csv", "w") do |csv|
+      csv << %w{name phone address position salary slack github}
+      @peeps.each do |person|
+        csv << [person.name, person.phone, person.address, person.position, person.salary, person.slack, person.github]
+      end
+    end
+  end
+
   PREFIX = "Dear humanoid please provide the"
 
   def add_person
@@ -75,7 +93,7 @@ class Menu
     person.position = gets.chomp
 
     puts "#{PREFIX} salary"
-    person.salary = gets.chomp.to_i
+    person.salary = gets.chomp
 
     puts "#{PREFIX} slack"
     person.slack = gets.chomp
@@ -85,13 +103,7 @@ class Menu
 
     @peeps << person
 
-    CSV.open("employees.csv", "w") do |csv|
-      csv << %w["name", "phone", "address", "position", "salary", "slack", "github"]
-      @peeps.each do |person|
-        csv << [person.name, person.phone, person.address, person.position, person.salary, person.slack, person.github]
-      end
-    end
-
+    read
     puts "#{@peeps[-1].name} has been added, thank you"
   end
 
@@ -125,13 +137,7 @@ class Menu
     for person in @peeps
       if person.name == delete_person
         @peeps.delete(person)
-
-        CSV.open("employees.csv", "w") do |csv|
-          csv << ["name", "phone", "address", "position", "salary", "slack", "github"]
-          @peeps.each do |person|
-            csv << [person.name, person.phone, person.address, person.position, person.salary, person.slack, person.github]
-          end
-        end
+        write
         puts "#{delete_person} has been removed from our employees database"
         break
       else
@@ -150,8 +156,6 @@ class Menu
     exit
   end
 end
-
-p @peeps
 
 menu = Menu.new
 menu.prompt

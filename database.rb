@@ -151,5 +151,7 @@ class Menu
   end
 end
 
+p @peeps
+
 menu = Menu.new
 menu.prompt

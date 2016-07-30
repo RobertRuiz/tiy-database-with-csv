@@ -101,13 +101,7 @@ class Menu
 
     for person in @peeps
       if person.name == search_person
-        @peeps.search(person)
-        CSV.open("employees.csv", "w") do |csv|
-          csv << ["name", "phone", "address", "position", "salary", "slack", "github"]
-          @peeps.each do |person|
-            csv << [person.name, person.phone, person.address, person.position, person.salary, person.slack, person.github]
-          end
-        end
+
         puts "That is:
               #{person.name}
               #{person.phone}
@@ -136,14 +130,13 @@ class Menu
           csv << ["name", "phone", "address", "position", "salary", "slack", "github"]
           @peeps.each do |person|
             csv << [person.name, person.phone, person.address, person.position, person.salary, person.slack, person.github]
-          puts "#{delete_person} has been removed from our employees database"
           end
         end
-        # return
-
+        puts "#{delete_person} has been removed from our employees database"
+        break
       else
         puts "Unable to delete #{delete_person}, they may have been already deleted by someone else"
-        # return
+        break
       end
     end
   end

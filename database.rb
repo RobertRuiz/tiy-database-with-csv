@@ -58,11 +58,18 @@ class Menu
   end
 
   def read
-    CSV.open("employees.csv", "w") do |csv|
-      csv << %w{name phone address position salary slack github}
-      @peeps.each do |person|
-        csv << [person.name, person.phone, person.address, person.position, person.salary, person.slack, person.github]
-      end
+    CSV.foreach("employees.csv", { headers: true, header_converters: :symbol }) do |employee|
+      person = Peeps.new
+
+      person.name     = employee[:name]
+      person.phone    = employee[:phone]
+      person.address  = employee[:address]
+      person.position = employee[:position]
+      person.salary   = employee[:salary]
+      person.slack    = employee[:slack]
+      person.github   = employee[:github]
+
+      @peeps << person
     end
   end
 
@@ -103,7 +110,7 @@ class Menu
 
     @peeps << person
 
-    read
+    write
     puts "#{@peeps[-1].name} has been added, thank you"
   end
 
@@ -113,6 +120,8 @@ class Menu
 
     for person in @peeps
       if person.name == search_person
+
+        read
 
         puts "That is:
               #{person.name}

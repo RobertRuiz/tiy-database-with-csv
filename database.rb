@@ -29,7 +29,7 @@ class Menu
 
   def prompt
     loop do
-      puts "Please Select the corresponding letter (A, S or D) as follows:"
+      puts "Please select the corresponding letter (A, S, R, C or D) as follows:"
 
       puts "A: Add a person"
       puts "S: Search for a person"
@@ -52,7 +52,7 @@ class Menu
         cancel_search
         exit
       else
-        puts "Selections are limited to A, S, R or D"
+        puts "Selections are limited to A, S, R, C or D only"
       end
     end
   end
@@ -98,7 +98,7 @@ class Menu
     puts "#{@peeps[-1].name} has been added, thank you"
   end
 
-  def found
+  def found(person)
     puts "That is:
       #{person.name}
       #{person.phone}
@@ -113,8 +113,11 @@ class Menu
     puts "Who are you looking for ?"
     search_person = gets.chomp
 
-  if @peeps.any? { |person| person == search_person }
-      found
+    matching_person = @peeps.find { |person| person.name == search_person }
+    if !matching_person.nil?
+      found(matching_person)
+    else
+      puts "Unable to find #{search_person}, they are officially M.I.A."
     end
   end
 
@@ -122,15 +125,21 @@ class Menu
     puts "Who would you like to delete/zap/86?"
     delete_person = gets.chomp
 
+    matching_person = @peeps.find { |person| person.name == delete_person }
+
     for person in @peeps
-      if person.name == delete_person
-        @peeps.delete(person)
+      if !matching_person.nil?
+        @peeps.delete(matching_person)
         write
-        puts "#{delete_person} has been removed from our employees database"
+        # @peeps.delete(matching_person)
+        # write @peeps.delete(matching_person)
+        # @peeps.delete(delete_person)
+        # write @peeps.delete(delete_person)
+        puts "#{delete_person}'s name and information has been removed from our employees database"
         break
       else
         puts "Unable to delete #{delete_person}, they may have been already deleted by someone else"
-        break
+        # break
       end
     end
   end
@@ -145,5 +154,5 @@ class Menu
   end
 end
 
-menu = Menu.new
+menu = Menu.new()
 menu.prompt

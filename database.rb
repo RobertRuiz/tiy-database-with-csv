@@ -57,22 +57,6 @@ class Menu
     end
   end
 
-  def read
-    CSV.foreach("employees.csv", { headers: true, header_converters: :symbol }) do |employee|
-      person = Peeps.new
-
-      person.name     = employee[:name]
-      person.phone    = employee[:phone]
-      person.address  = employee[:address]
-      person.position = employee[:position]
-      person.salary   = employee[:salary]
-      person.slack    = employee[:slack]
-      person.github   = employee[:github]
-
-      @peeps << person
-    end
-  end
-
   def write
     CSV.open("employees.csv", "w") do |csv|
       csv << %w{name phone address position salary slack github}
@@ -114,28 +98,23 @@ class Menu
     puts "#{@peeps[-1].name} has been added, thank you"
   end
 
+  def found
+    puts "That is:
+      #{person.name}
+      #{person.phone}
+      #{person.address}
+      #{person.position}
+      #{person.salary}
+      #{person.slack}
+      #{person.github}"
+  end
+
   def search_person
     puts "Who are you looking for ?"
     search_person = gets.chomp
 
-    for person in @peeps
-      if person.name == search_person
-
-        read
-
-        puts "That is:
-              #{person.name}
-              #{person.phone}
-              #{person.address}
-              #{person.position}
-              #{person.salary}
-              #{person.slack}
-              #{person.github}"
-        break
-      else
-        puts "Unable to find #{search_person}, they are officially M.I.A."
-      end
-      break
+  if @peeps.any? { |person| person == search_person }
+      found
     end
   end
 
